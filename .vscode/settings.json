@@ -12,5 +12,6 @@
   "prettier.semi": false,
   "[shellscript]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
-  }
+  },
+  "livePreview.defaultPreviewPath": "/coverage/libs/core/lib/index.html"
 }
