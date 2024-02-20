@@ -7,18 +7,9 @@
       "name": "Debug",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "nx",
-      "runtimeArgs": [
-        "affected:test",
-        "--skip-nx-cache",
-        "--runInBand",
-      ],
-      "skipFiles": [
-        "<node_internals>/**",
-        "${workspaceFolder}/node_modules/*"
-      ],
-      "outFiles": [
-        "${workspaceFolder}/dist/**/*.js"
-      ]
+      "runtimeArgs": ["run-many", "-t", "test", "--runInBand"],
+      "skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/*"],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     }
     // repeat for each debuggable app
   ]
