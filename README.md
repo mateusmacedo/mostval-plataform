@@ -10,7 +10,7 @@ npm install -g pnpm
 
 ## Global dependencies
 
-This project uses the following global dependencies:
+This project uses the following global dependencies to run tasks and enforce code quality:
 
 ```sh
 npm install -g @commitlint/cli @commitlint/config-conventional @commitlint/config-nx-scopes eslint@~8.48.0 ts-node ts-jest lint-staged husky
