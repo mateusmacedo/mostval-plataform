@@ -4,7 +4,7 @@
 
 This project uses [pnpm](https://pnpm.io/) as the package manager. You can install it with the following command:
 
-```sh
+```bash
 npm install -g pnpm
 ```
 
@@ -12,8 +12,8 @@ npm install -g pnpm
 
 This project uses the following global dependencies to run tasks and enforce code quality:
 
-```sh
-npm install -g @commitlint/cli @commitlint/config-conventional @commitlint/config-nx-scopes eslint@~8.48.0 ts-node ts-jest lint-staged husky
+```bash
+npm install -g @commitlint/cli @commitlint/config-conventional @commitlint/config-nx-scopes eslint@~8.48.0 ts-node ts-jest lint-staged husky @commitlint/types
 ```
 
 ## Running tasks
@@ -26,13 +26,13 @@ nx <target> <project> <...options>
 
 You can also run multiple targets:
 
-```sh
+```bash
 nx run-many -t <target1> <target2>
 ```
 
 ..or add `-p` to filter specific projects
 
-```sh
+```bash
 nx run-many -t <target1> <target2> -p <proj1> <proj2>
 ```
 
