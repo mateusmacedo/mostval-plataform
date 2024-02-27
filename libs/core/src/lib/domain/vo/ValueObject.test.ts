@@ -1,10 +1,10 @@
-import { ValueObject } from './ValueObject';
+import { BaseValueObject } from './ValueObject';
 
 interface ValueObjectProps {
   dummy: string;
 }
 
-class TestValueObject extends ValueObject<ValueObjectProps> {
+class TestValueObject extends BaseValueObject<ValueObjectProps> {
   constructor(props: ValueObjectProps) {
     super(props);
   }
@@ -47,7 +47,7 @@ describe('ValueObject', () => {
   });
 
   it('should return false when comparing with a value object of a different class', () => {
-    class AnotherTestValueObject extends ValueObject<ValueObjectProps> {
+    class AnotherTestValueObject extends BaseValueObject<ValueObjectProps> {
       constructor(props: ValueObjectProps) {
         super(props);
       }

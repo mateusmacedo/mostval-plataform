@@ -25,7 +25,13 @@ export abstract class WatchedList<T> {
   }
 
   public getNewItems(): T[] {
-    return Array.from(this.new).map((id) => this.currentItems.get(id)!);
+    return Array.from(this.new).map((id) => {
+      const item = this.currentItems.get(id);
+      if (!item) {
+        throw new Error('Item not found');
+      }
+      return item;
+    });
   }
 
   public getRemovedItems(): T[] {
