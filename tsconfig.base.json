@@ -21,12 +21,20 @@
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "incremental": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "strict": true
+    "strict": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "allowJs": true,
+    "alwaysStrict": true,
+    "esModuleInterop": true,
+    "noEmitOnError": true,
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
   "exclude": ["node_modules", "tmp"]
 }

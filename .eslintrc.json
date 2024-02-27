@@ -1,6 +1,6 @@
 {
   "root": true,
-  "ignorePatterns": ["**/*"],
+  "ignorePatterns": ["node_modules/*", "dist/*", "coverage/*"],
   "plugins": ["@nx"],
   "overrides": [
     {
@@ -18,20 +18,24 @@
               }
             ]
           }
-        ]
+        ],
+        "no-unused-vars": "warn",
+        "prefer-const": "error"
       }
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nx/typescript"],
+      "extends": ["plugin:@nx/typescript", "prettier", "plugin:prettier/recommended"],
       "rules": {
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/ban-types": "off"
+        "@typescript-eslint/no-explicit-any": "warn",
+        "@typescript-eslint/ban-types": "warn",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off"
       }
     },
     {
       "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nx/javascript"],
+      "extends": ["plugin:@nx/javascript", "plugin:prettier/recommended"],
       "rules": {}
     },
     {

@@ -5,7 +5,7 @@ import {
   InvalidDataError,
   NotFoundError,
   ValidationError,
-} from '../../domain';
+} from '../../../domain';
 import { HttpResponse, HttpResponseProps } from './HttpResponse';
 
 export abstract class AbstractController {

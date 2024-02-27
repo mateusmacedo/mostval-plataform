@@ -6,10 +6,7 @@ export class Identifier<T> implements ValueObject<T> {
   }
 
   equals(id: Identifier<T>): boolean {
-    if (id === null || id === undefined) {
-      return false;
-    }
-    if (!(id instanceof this.constructor)) {
+    if (id.constructor.name !== this.constructor.name) {
       return false;
     }
     return id.toValue() === this.value;
