@@ -1,11 +1,11 @@
-import { IValueObject } from '../contracts/ValueObject';
+import { ValueObject } from './ValueObject';
 
-export class Identifier<T> implements IValueObject<T> {
+export class Identifier<T> implements ValueObject<T> {
   constructor(private value: T) {
     this.value = value;
   }
 
-  equals(id?: Identifier<T>): boolean {
+  equals(id: Identifier<T>): boolean {
     if (id === null || id === undefined) {
       return false;
     }
