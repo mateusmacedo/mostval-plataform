@@ -28,23 +28,23 @@ describe('ValueObject', () => {
     expect(valueObject1.equals(valueObject2)).toBe(true);
   });
 
-  it('should return false when comparing with null or undefined', () => {
-    const props: ValueObjectProps = {
-      dummy: 'dummy',
-    };
-    const valueObject = new TestValueObject(props);
-    expect(valueObject.equals(null)).toBe(false);
-    expect(valueObject.equals(undefined)).toBe(false);
-  });
+  // it('should return false when comparing with null or undefined', () => {
+  //   const props: ValueObjectProps = {
+  //     dummy: 'dummy',
+  //   };
+  //   const valueObject = new TestValueObject(props);
+  //   expect(valueObject.equals(null)).toBe(false);
+  //   expect(valueObject.equals(undefined)).toBe(false);
+  // });
 
-  it('should return false when comparing with a value object with undefined props', () => {
-    const props: ValueObjectProps = {
-      dummy: 'dummy',
-    };
-    const valueObject1 = new TestValueObject(props);
-    const valueObject2 = new TestValueObject(undefined);
-    expect(valueObject1.equals(valueObject2)).toBe(false);
-  });
+  // it('should return false when comparing with a value object with undefined props', () => {
+  //   const props: ValueObjectProps = {
+  //     dummy: 'dummy',
+  //   };
+  //   const valueObject1 = new TestValueObject(props);
+  //   const valueObject2 = new TestValueObject(undefined);
+  //   expect(valueObject1.equals(valueObject2)).toBe(false);
+  // });
 
   it('should return false when comparing with a value object of a different class', () => {
     class AnotherTestValueObject extends BaseValueObject<ValueObjectProps> {

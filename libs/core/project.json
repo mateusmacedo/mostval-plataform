@@ -1,8 +1,16 @@
 {
-  "name": "core",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/core/src",
+  "name": "core",
   "projectType": "library",
-  "targets": {},
-  "tags": []
+  "sourceRoot": "libs/core/src",
+  "tags": [],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "libs/core/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
 }

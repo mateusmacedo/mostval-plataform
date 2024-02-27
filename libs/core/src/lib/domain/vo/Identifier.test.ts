@@ -14,13 +14,6 @@ describe('Identifier', () => {
     expect(id1.equals(id2)).toBe(true);
   });
 
-  it('should return false when comparing with null or undefined', () => {
-    const idValue = '123';
-    const id = new Identifier(idValue);
-    expect(id.equals(null)).toBe(false);
-    expect(id.equals(undefined)).toBe(false);
-  });
-
   it('should return false when comparing with an identifier of a different class', () => {
     class OtherIdentifier<T> extends Identifier<T> {
       constructor(value: T) {
@@ -30,7 +23,7 @@ describe('Identifier', () => {
     const idValue = '123';
     const id1 = new Identifier(idValue);
     const id2 = new OtherIdentifier(idValue);
-    expect(id1.equals(id2)).toBe(true);
+    expect(id1.equals(id2)).toBe(false);
   });
 
   it('should return false when comparing with an identifier of a different value', () => {

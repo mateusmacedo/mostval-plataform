@@ -1,9 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: {
-    name: 'core',
-    color: 'blue',
-  },
+  displayName: 'core',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {
@@ -11,5 +8,5 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/libs/core',
-  collectCoverage: true,
+  jestConfig: '<rootDir>/jest.config.ts',
 };
