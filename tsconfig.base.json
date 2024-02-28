@@ -23,6 +23,12 @@
       ],
       "@mention/nest-core": [
         "libs/nest-core/src/index.ts"
+      ],
+      "@mention/next-core": [
+        "libs/next-core/src/index.ts"
+      ],
+      "@mention/next-core/server": [
+        "libs/next-core/src/server.ts"
       ]
     },
     "removeComments": true,
@@ -41,7 +47,10 @@
     "alwaysStrict": true,
     "esModuleInterop": true,
     "noEmitOnError": true,
-    "typeRoots": ["./node_modules/@types", "./types"]
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ]
   },
   "exclude": [
     "node_modules",
