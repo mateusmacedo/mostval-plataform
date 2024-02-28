@@ -6,6 +6,7 @@
   "devDependencies": {
     "@commitlint/cli": "^18.0.0",
     "@commitlint/config-conventional": "^18.0.0",
+    "@eslint/eslintrc": "^2.1.1",
     "@jest/globals": "^29.1.0",
     "@jscutlery/semver": "^5.1.1",
     "@nestjs/schematics": "^10.0.1",
