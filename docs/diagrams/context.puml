@@ -1,6 +1,6 @@
 @startuml Mention Plataform
 set separator none
-title Mention Plataform - API Application - Components
+title Mention Plataform - Context Diagram
 
 ' top to bottom direction
 ' left to right direction
@@ -8,21 +8,32 @@ title Mention Plataform - API Application - Components
 !include <C4/C4>
 !include <C4/C4_Context>
 
-AddBoundaryTag("Mention Plataform")
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+
+!include DEVICONS/react.puml
+!include DEVICONS2/typescript.puml
+!include FONTAWESOME/users.puml
+
+LAYOUT_WITH_LEGEND()
+
+UpdateElementStyle("boundary", $borderColor="Black")
+
 Boundary(mention_zone, "Mention Plataform", "WebApp and Backoffice System") {
-    Person(Operator, "Operator", "The operator is an agent executing customer service, being responsible for taking care of the customer's subscription, responding to customer requests.", $tags="")
-    Person(Admin, "Admin", "The administrator has access to manage sensitive and restricted aspects. Responsible for maintaining the platform's structures and rules in accordance with the defined setup. In addition to performing cross-cutting tasks such as command line operations.", $tags="")
-    System(MentionWebApp, "Mention WebApp", "Allows customers subscribe or sign in, manage your profile, preferences and subscription, request press material, review and approve your requests, interact with operators, send or approve suggestions.etc.", $tags="")
-    System(MentionBackOffice, "Backoffice System", "Provides a solution to manage plataform domain data, acl, order processing, file manager, customer service, etc.", $tags="")
+    Person(Operators, "Operators", "Operators are the agents who perform customer service, being responsible for fulfilling customer requests throughout their subscription cycle.", $tags="", $sprite="users")
+    Person(Admin, "Admin", "Administrators have access to manage sensitive and restricted aspects. Responsible for maintaining the platform's structures and rules in accordance with the defined setup. In addition to performing cross-cutting tasks such as command-line operations to maintain or restore the consistent state of the application.", $tags="", $sprite="users")
+    System(MentionWebApp, "Mention WebApp", "Allows customers to sign up or log in effortlessly, enabling seamless management of profiles, preferences and subscriptions. Facilitates requests for press materials by providing a platform to review and approve them, request and provide suggestions. Furthermore, it offers perfect interaction with operators, allowing the exchange of messages during the production of the requested material.", $tags="", $sprite="react")
+    System(MentionBackOffice, "Backoffice System", "Offers an extensive and robust solution for effectively managing a wide array of platform domain data, including intricate access control lists (ACL), streamlined order processing systems, advanced file management capabilities, and seamlessly integrated customer service functionalities, among other essential features.", $tags="", $sprite="typescript")
 }
 
-Person(SubcribedUser, "Subcribed User (Customer)", "Platform customer who purchased a product and/or service subscription plan.", $tags="")
+Person(SubcribedUser, "Subcribed Users (Customers)", "Platform customer who purchased a product and/or service subscription plan. You can view and interact with the context of your subscription, such as profile, orders, licenses, archive and mailbox.", $tags="", $sprite="users")
 
 Rel(SubcribedUser, MentionWebApp, "View your orders, subscription data, etc and make orders")
 Rel_L(MentionWebApp, MentionBackOffice, "Make requests for the plataform services")
-Rel(Operator, MentionBackOffice, "Write press material, interact with customers, etc")
-Rel(Admin, MentionBackOffice, "Manage plataform domain data, acl, order management, file manager, customer service etc")
-Rel(MentionBackOffice, SubcribedUser, "Send emails, sms, notifications, etc")
+Rel(Operators, MentionBackOffice, "Write press material, interact with customers, etc")
+Rel(Admin, MentionBackOffice, "Manage plataform domain data, acl, order management, file manager, customer service, communication, etc")
+Rel(MentionBackOffice, SubcribedUser, "Send communications (emails, sms, notifications, codes, etc)")
 
 SHOW_LEGEND(true)
 @enduml
