@@ -1,0 +1,47 @@
+@startuml Mention Plataform
+set separator none
+title Mention Plataform - System Landscape
+
+top to bottom direction
+' left to right direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+
+AddBoundaryTag("Mention Plataform")
+Boundary(mention_zone, "Mention Zone") {
+
+    Person(Operator, "Operator", "Operatro of the plataform", $tags="")
+    Person(Admin, "Admin", "Admin of the plataform", $tags="")
+
+' Mention WebApp Systems
+    System(MentionWebApp, "Mention WebApp", "Allows customers subscribe or sign in, manage your profile, preferences and subscription, request press material, review and approve your requests, interact with operators, send or approve suggestions.etc.", $tags="")
+
+' Mention Backoffice Systems
+    System(MentionBackOffice, "Backoffice System", "Provides a solution to manage plataform domain data, acl, order processing, file manager, customer service, etc.", $tags="")
+}
+
+Person(User, "User", "Customer of the plataform", $tags="")
+
+System_Ext(Cloud, "Cloud", "Cloud services", $tags="")
+System_Ext(IAModel, "AI Model", "AI Text Generation Model", $tags="")
+System_Ext(ERP, "ERP", "Enterprise Resource Planning", $tags="")
+System_Ext(CRM, "CRM", "Customer Relationship Management", $tags="")
+
+' Relationships between actor and systems
+Rel_L(User, MentionWebApp, "View your orders, subscription data, etc and make orders")
+Rel_D(Admin, MentionBackOffice, "Make administrative tasks as manage the customers, manage the subscription data, use cli console to perform tasks, etc")
+Rel_D(Operator, MentionBackOffice, "Make operational tasks as process orders, interact with the customers, etc")
+
+' Relationships between systems and external systems
+Rel_D(MentionWebApp, MentionBackOffice, "Make requests for backoffice services")
+Rel_D(MentionBackOffice, ERP, "Make requests for billing services")
+Rel_D(MentionBackOffice, CRM, "Make requests for CRM services")
+Rel_L(MentionBackOffice, Cloud, "Make requests for cloud services")
+Rel_R(MentionBackOffice, User, "Receive messages from the plataform")
+Rel_L(MentionBackOffice, IAModel, "Make requests for AI Text Generation Model")
+
+Lay_D(Cloud, IAModel)
+
+SHOW_LEGEND(true)
+@enduml
