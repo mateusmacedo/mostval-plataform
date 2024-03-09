@@ -10,19 +10,19 @@ title Mention Plataform - API Application - Components
 
 AddBoundaryTag("Mention Plataform")
 Boundary(mention_zone, "Mention Plataform", "WebApp and Backoffice System") {
-    Person(Operator, "Operator", "Operator of the plataform", $tags="")
-    Person(Admin, "Admin", "Admin of the plataform", $tags="")
+    Person(Operator, "Operator", "The operator is an agent executing customer service, being responsible for taking care of the customer's subscription, responding to customer requests.", $tags="")
+    Person(Admin, "Admin", "The administrator has access to manage sensitive and restricted aspects. Responsible for maintaining the platform's structures and rules in accordance with the defined setup. In addition to performing cross-cutting tasks such as command line operations.", $tags="")
     System(MentionWebApp, "Mention WebApp", "Allows customers subscribe or sign in, manage your profile, preferences and subscription, request press material, review and approve your requests, interact with operators, send or approve suggestions.etc.", $tags="")
     System(MentionBackOffice, "Backoffice System", "Provides a solution to manage plataform domain data, acl, order processing, file manager, customer service, etc.", $tags="")
 }
 
-Person(User, "User", "Customer of the plataform", $tags="")
+Person(SubcribedUser, "Subcribed User (Customer)", "Platform customer who purchased a product and/or service subscription plan.", $tags="")
 
-Rel(User, MentionWebApp, "View your orders, subscription data, etc and make orders")
+Rel(SubcribedUser, MentionWebApp, "View your orders, subscription data, etc and make orders")
 Rel_L(MentionWebApp, MentionBackOffice, "Make requests for the plataform services")
 Rel(Operator, MentionBackOffice, "Write press material, interact with customers, etc")
 Rel(Admin, MentionBackOffice, "Manage plataform domain data, acl, order management, file manager, customer service etc")
-Rel(MentionBackOffice, User, "Send emails, sms, notifications, etc")
+Rel(MentionBackOffice, SubcribedUser, "Send emails, sms, notifications, etc")
 
 SHOW_LEGEND(true)
 @enduml
