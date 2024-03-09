@@ -10,24 +10,19 @@ title Mention Plataform - API Application - Components
 
 AddBoundaryTag("Mention Plataform")
 Boundary(mention_zone, "Mention Zone") {
-    Person(Operator, "Operator", "Operatro of the plataform", $tags="")
+    Person(Operator, "Operator", "Operator of the plataform", $tags="")
     Person(Admin, "Admin", "Admin of the plataform", $tags="")
-    System(Frontend, "Web Frontend", "Allows users signin, signup, view information and make interactiron with systems resources as orders, profile, user managment, make interaction with other users, etc.", $tags="")
-    System(Backend, "Backend API", "Provide a network interface to access the plataform resouces as subscription, order production, user management, message comunication distribuition, reports, etc.", $tags="")
+    System(MentionWebApp, "Mention WebApp", "Allows customers subscribe or sign in, manage your profile, preferences and subscription, request press material, review and approve your requests, interact with operators, send or approve suggestions.etc.", $tags="")
+    System(MentionBackOffice, "Backoffice System", "Provides a solution to manage plataform domain data, acl, order processing, file manager, customer service, etc.", $tags="")
 }
 
 Person(User, "User", "Customer of the plataform", $tags="")
-System_Ext(Cloud, "Cloud", "Cloud services", $tags="")
-System_Ext(ERP, "ERP", "Enterprise Resource Planning", $tags="")
-System_Ext(CRM, "CRM", "Customer Relationship Management", $tags="")
 
-Rel_D(User, Frontend, "View your orders, subscription data, etc and make orders")
-Rel_D(Frontend, Backend, "Make requests for the plataform services")
-Rel_L(Operator, Frontend, "View and manage orders, subscription data, etc")
-Rel_R(Admin, Frontend, "View and manage orders, subscription data, etc")
-Rel_L(Admin, Backend, "Interact with cli console to manage plataform resources")
-Rel_U(Backend, ERP, "Make requests for billing services")
-Rel_L(Backend, CRM, "Make requests for CRM services")
-Rel_D(Backend, Cloud, "Make requests for cloud services")
+Rel_D(User, MentionWebApp, "View your orders, subscription data, etc and make orders")
+Rel_R(MentionWebApp, MentionBackOffice, "Make requests for the plataform services")
+Rel_L(Operator, MentionBackOffice, "Write press material, interact with customers, etc")
+Rel_U(Admin, MentionBackOffice, "Manage plataform domain data, acl, order management, file manager, customer service etc")
+Rel_U(MentionBackOffice, User, "Send emails, sms, notifications, etc")
+
 
 @enduml
