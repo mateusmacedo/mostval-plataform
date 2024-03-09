@@ -8,7 +8,23 @@ title Mention Plataform - API Application - Components
 !include <C4/C4>
 !include <C4/C4_Context>
 
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
 
+!include DEVICONS/react.puml
+!include DEVICONS2/typescript.puml
+!include FONTAWESOME/users.puml
+
+Person(Operators, "Operators", "Operators are the agents who perform customer service, being responsible for fulfilling customer requests throughout their subscription cycle.", $tags="", $sprite="users")
+
+Person(Admin, "Admin", "Administrators have access to manage sensitive and restricted aspects. Responsible for maintaining the platform's structures and rules in accordance with the defined setup. In addition to performing cross-cutting tasks such as command-line operations to maintain or restore the consistent state of the application.", $tags="", $sprite="users")
+
+System(MentionWebApp, "Mention WebApp", "Allows customers to sign up or log in effortlessly, enabling seamless management of profiles, preferences and subscriptions. Facilitates requests for press materials by providing a platform to review and approve them, request and provide suggestions. Furthermore, it offers perfect interaction with operators, allowing the exchange of messages during the production of the requested material.", $tags="", $sprite="react")
+
+System(MentionBackOffice, "Backoffice System", "Offers an extensive and robust solution for effectively managing a wide array of platform domain data, including intricate access control lists (ACL), streamlined order processing systems, advanced file management capabilities, and seamlessly integrated customer service functionalities, among other essential features.", $tags="", $sprite="typescript")
+
+Person(SubcribedUser, "Subcribed Users (Customers)", "Platform customer who purchased a product and/or service subscription plan. You can view and interact with the context of your subscription, such as profile, orders, licenses, archive and mailbox.", $tags="", $sprite="users")
 
 SHOW_LEGEND(true)
 @enduml
