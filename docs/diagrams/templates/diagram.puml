@@ -7,6 +7,7 @@ title Mention Plataform - API Application - Components
 
 !include <C4/C4>
 !include <C4/C4_Context>
+!include <C4/C4_Container>
 
 !define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
 !define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
@@ -15,16 +16,40 @@ title Mention Plataform - API Application - Components
 !include DEVICONS/react.puml
 !include DEVICONS2/typescript.puml
 !include FONTAWESOME/users.puml
+!include FONTAWESOME/file_invoice.puml
+!include FONTAWESOME/file_invoice_dollar.puml
+!include FONTAWESOME/brain.puml
+!include FONTAWESOME/cloud.puml
 
-Person(Operators, "Operators", "Operators are the agents who perform customer service, being responsible for fulfilling customer requests throughout their subscription cycle.", $tags="", $sprite="users")
+UpdateElementStyle("boundary", $borderColor="Black")
 
-Person(Admin, "Admin", "Administrators have access to manage sensitive and restricted aspects. Responsible for maintaining the platform's structures and rules in accordance with the defined setup. In addition to performing cross-cutting tasks such as command-line operations to maintain or restore the consistent state of the application.", $tags="", $sprite="users")
+Boundary(mention_zone, "Mention Zone") {
 
-System(MentionWebApp, "Mention WebApp", "Allows customers to sign up or log in effortlessly, enabling seamless management of profiles, preferences and subscriptions. Facilitates requests for press materials by providing a platform to review and approve them, request and provide suggestions. Furthermore, it offers perfect interaction with operators, allowing the exchange of messages during the production of the requested material.", $tags="", $sprite="react")
+  Person(Admin, "Admin", "Administrators have access to manage sensitive and restricted aspects. Responsible for maintaining the platform's structures and rules in accordance with the defined setup. In addition to performing cross-cutting tasks such as command-line operations to maintain or restore the consistent state of the application.", $tags="", $sprite="users")
 
-System(MentionBackOffice, "Backoffice System", "Offers an extensive and robust solution for effectively managing a wide array of platform domain data, including intricate access control lists (ACL), streamlined order processing systems, advanced file management capabilities, and seamlessly integrated customer service functionalities, among other essential features.", $tags="", $sprite="typescript")
+  System(MentionWebApp, "Mention WebApp", "Allows customers to sign up or log in effortlessly, enabling seamless management of profiles, preferences and subscriptions. Facilitates requests for press materials by providing a platform to review and approve them, request and provide suggestions. Furthermore, it offers perfect interaction with operators, allowing the exchange of messages during the production of the requested material.", $tags="", $sprite="react")
 
-Person(SubcribedUser, "Subcribed Users (Customers)", "Platform customer who purchased a product and/or service subscription plan. You can view and interact with the context of your subscription, such as profile, orders, licenses, archive and mailbox.", $tags="", $sprite="users")
+  System_Boundary("System_boundary", "Web 2.0 System", $tags="") {
+
+    Container(System.WebApplication, "Web Application", "TypeScript and Strapi Headless CMS Admin", "Provides the functionality via a web-based user interface, to manager the organization's domain data structure, and to manage the organization's domain data information.", $tags="")
+
+    Container(System.WebApplication, "Web Application", "TypeScript and Strapi Web APIs", "Provides the functionality via JSON/HTTPS Restful API, GraphQL, and WebSockets; to manag65er the organization's domain data structure, and to manage the organization's domain data information.", $tags="")
+
+    Container(System.APIApplication, "API Application", "TypeScript and Nest.js", "Provides the functionality via a JSON/HTTPS Restful API.", $tags="")
+
+    Container(System.APIApplication, "API Application", "TypeScript and Nest.js", "Provides the functionality via a gRPC API.", $tags="")
+
+    Container(System.APIApplication, "API Application", "TypeScript and Nest.js", "Provides the functionality via a Pub/Sub Message Stream and/or Queue broker", $tags="")
+
+    ContainerDb(SQl.Database, "Database", "SQL Database Schema", "Stores information about customers, subscriptions, and the material produced, users, and their roles, and the organization's domain data structure.", $tags="")
+
+    ContainerDb(NoSQL.Database, "Database", "NoSQL Database Schema", "Stores information about the organization's domain data information.", $tags="")
+
+    Container(System.SinglePageApplication, "Single-Page Application", "TypeScript and Next.js", "Provides all of the Internet banking functionality to customers via their web browser.", $tags="")
+
+    Container(System.MobileApp, "Mobile App", "React Native", "Provides all of the Internet System functionality to customers via their mobile device.", $tags="")
+  }
+}
 
 SHOW_LEGEND(true)
 @enduml
