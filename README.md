@@ -52,3 +52,54 @@ If you happen to use Nx plugins, you can leverage code generators that might com
 Run `nx list` to get a list of available plugins and whether they have generators. Then run `nx list <plugin-name>` to see what generators are available.
 
 Learn more about [Nx generators on the docs](https://nx.dev/features/generate-code).
+
+## Generate NestJS Application
+
+### It is recommended to use the Nx Console extension of vscode, the use of the extension exempts the execution of the following commands to create the app.
+
+Install dependencies:
+
+    ```bash
+        npm install -g pnpm
+    ```
+    ```bash
+        pnpm install
+    ```
+
+### By convension one should use the api suffix in the directory to define that it is an api and not front-end.
+
+To generate a NestJS application, run the following command:
+
+    ```bash
+        pnpm exec nx generate @nx/nest:application --name=my-app --directory=apps/my-app-api --e2eTestRunner=none --projectNameAndRootFormat=as-provided --strict=true --no-interactive
+    ```
+
+## Generate Container
+
+Execute the following command to install container dependencies for a project:
+
+    ```bash
+        pnpm add -D @nx-tools/nx-container @nx-tools/container-metadata
+    ```
+
+To create container metadata for a project, run the following command:
+
+    ```bash
+        pnpm exec nx g @nx-tools/nx-container:init my-app --template nest --engine docker
+    ```
+
+## Generate Dockerfile
+
+To generate a Dockerfile for a project, run the following command:
+
+    ```bash
+        pnpm exec nx g @nx-tools/nx-container:init my-app --template nest --engine docker
+    ```
+
+Change the COPY command in the dockerfile where is only the one in the "my-app" to copy the project root files.
+of: COPY my-app
+for: COPY .npmrc package.json pnpm-lock.yaml ./
+
+Change command RUN to install the dependencies in the project.
+of: RUN npm install --omit=dev
+for: RUN pnpm install --frozen-lockfile --prod --ignore-scripts

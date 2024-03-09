@@ -10,6 +10,8 @@
     "@jscutlery/semver": "^5.1.1",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
+    "@nx-tools/container-metadata": "^5.2.0",
+    "@nx-tools/nx-container": "^5.2.0",
     "@nx/eslint": "18.0.4",
     "@nx/eslint-plugin": "18.0.4",
     "@nx/jest": "18.0.4",
