@@ -17,8 +17,8 @@ describe('EntitySpec', () => {
     const myEntityProps: EntityProps = {
       id: 'test',
       version: 0,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date('1970-01-01'),
+      updatedAt: new Date('1970-01-01'),
       deletedAt: null,
       myProp: 'test',
     };
@@ -40,6 +40,7 @@ describe('EntitySpec', () => {
   it('should increment the version', () => {
     entitySpec.incrementVersion();
     expect(entitySpec.version).toEqual(1);
+    expect(entitySpec.updatedAt.getTime()).toBeGreaterThan(entitySpec.createdAt.getTime());
   });
 
   it('should return the createdAt date', () => {
