@@ -17,6 +17,7 @@ left to right direction
 !include DEVICONS/react.puml
 !include DEVICONS2/typescript.puml
 !include DEVICONS2/nestjs.puml
+!include DEVICONS2/postgresql_wordmark.puml
 !include FONTAWESOME/users.puml
 !include FONTAWESOME/file_invoice.puml
 !include FONTAWESOME/file_invoice_dollar.puml
@@ -35,10 +36,12 @@ Boundary(MentionZone, "Mention Zone") {
 
     System_Boundary(MentionBackOffice, "Backoffice System"){
       Container(BackofficeAdmin, "Backoffice Admin", "Node.js/Strapi", "Provides a web interface to manage the platform's data, such as customers, orders, subscriptions, etc. It also provides a Restful API to be consumed for other systems and services.", $tags="", $sprite="nodejs")
+      ContainerDb(MentionDB, "Mention Database", "PostgreSQL", "Stores the platform's data, such as customers, orders, subscriptions, etc.", $tags="", $sprite="postgresql_wordmark")
       Container(LicenseIssuer, "License Issuer", "TypeScript/Nest.js", "Provides a RESTful API to manage the licenses", $tags="", $sprite="nestjs")
       Container(MailDispatcher, "Mail Dispatcher", "TypeScript/Nest.js", "Provides a RESTful API to manage the mail dispatching", $tags="", $sprite="nestjs")
       Container(RichEditor, "Rich Editor", "TypeScript/Nest.js", "Provides a RESTful API to manage the rich editor", $tags="", $sprite="nestjs")
 
+      Rel_L(BackofficeAdmin, MentionDB, "Read and write data")
       Rel_U(LicenseIssuer, BackofficeAdmin, "Make requests for reading and writing licenses and orders")
       Rel_U(MailDispatcher, BackofficeAdmin, "Make requests for reading destinations, templates, data; and writing messages dispatched by the platform")
       Rel_U(RichEditor, BackofficeAdmin, "Make requests for rich editor reading and writing documents and templates")
