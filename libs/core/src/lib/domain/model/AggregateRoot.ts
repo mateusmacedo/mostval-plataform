@@ -1,14 +1,14 @@
 import { MessageBus } from './Bus';
-import { BaseEntity } from './Entity';
+import { BaseEntity, BaseEntityProps } from './Entity';
 import { Event } from './Message';
 
-export abstract class AggregateRoot<ID> extends BaseEntity<ID> {
-  private domainEvents: Event<any, any>[] = [];
-  constructor(id: ID, version = 0) {
-    super(id, version);
+export abstract class AggregateRoot<T extends BaseEntityProps<ID>, ID> extends BaseEntity<T, ID> {
+  private domainEvents: Event<unknown, unknown>[] = [];
+  constructor(props: T) {
+    super(props);
   }
 
-  protected addDomainEvent(domainEvent: Event<any, any>): void {
+  protected addDomainEvent(domainEvent: Event<unknown, unknown>): void {
     this.domainEvents.push(domainEvent);
   }
 
