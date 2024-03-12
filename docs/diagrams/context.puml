@@ -18,8 +18,6 @@ title Mention Plataform - Context Diagram
 
 LAYOUT_WITH_LEGEND()
 
-UpdateElementStyle("boundary", $borderColor="Black")
-
 Boundary(mention_zone, "Mention Plataform", "WebApp and Backoffice System") {
     Person(Operators, "Operators", "Operators are the agents who perform customer service, being responsible for fulfilling customer requests throughout their subscription cycle.", $tags="", $sprite="users")
     Person(Admin, "Admin", "Administrators have access to manage sensitive and restricted aspects. Responsible for maintaining the platform's structures and rules in accordance with the defined setup. In addition to performing cross-cutting tasks such as command-line operations to maintain or restore the consistent state of the application.", $tags="", $sprite="users")
