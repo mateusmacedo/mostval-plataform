@@ -1,16 +1,20 @@
 import { AggregateRoot } from './AggregateRoot';
 import { MessageBus } from './Bus';
+import { BaseEntityProps } from './Entity';
 import { Event } from './Message';
 
-type ID = string;
-class DomainEvent extends Event<any, any> {
+type AggregateProps = {
+  myProp: string;
+} & BaseEntityProps<string>;
+
+class DomainEvent extends Event<unknown, unknown> {
   constructor() {
     super({ id: 'id', type: 'type', payload: {}, metadata: {}, timestamp: 0 });
   }
 }
-class AggregateRootSpec extends AggregateRoot<ID> {
-  constructor(id: ID, version = 0) {
-    super(id, version);
+class AggregateRootSpec extends AggregateRoot<AggregateProps, string> {
+  constructor(props: AggregateProps) {
+    super(props);
   }
 
   public domainFeature(): void {
@@ -22,7 +26,15 @@ describe('AggregateRootSpec', () => {
   let messageBus: MessageBus;
 
   beforeEach(async () => {
-    aggregateRootSpec = new AggregateRootSpec('id');
+    const myAggregateProps: AggregateProps = {
+      id: 'test',
+      version: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+      myProp: 'test',
+    };
+    aggregateRootSpec = new AggregateRootSpec(myAggregateProps);
     messageBus = jest.createMockFromModule<MessageBus>('./Bus');
     messageBus.publishEvent = jest.fn();
   });
