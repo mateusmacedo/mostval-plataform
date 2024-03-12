@@ -1,0 +1,72 @@
+@startuml Mention Plataform
+set separator none
+title Mention Plataform - Backoffice Container Diagram
+
+' top to bottom direction
+left to right direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Container>
+
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define DEVICONS2 https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons2
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+
+!include DEVICONS/react.puml
+!include DEVICONS2/typescript.puml
+!include DEVICONS2/nestjs.puml
+!include FONTAWESOME/users.puml
+!include FONTAWESOME/file_invoice.puml
+!include FONTAWESOME/file_invoice_dollar.puml
+!include FONTAWESOME/brain.puml
+!include FONTAWESOME/cloud.puml
+
+UpdateSystemBoundaryStyle($bgColor="lightblue")
+
+Boundary(MentionZone, "Mention Zone") {
+
+    Person(Operators, "Operators", "Operators are the agents who perform customer service, being responsible for fulfilling customer requests throughout their subscription cycle.", $tags="", $sprite="users")
+
+    Person(Admin, "Admin", "Administrators have access to manage sensitive and restricted aspects. Responsible for maintaining the platform's structures and rules in accordance with the defined setup. In addition to performing cross-cutting tasks such as command-line operations to maintain or restore the consistent state of the application.", $tags="", $sprite="users")
+
+    System(MentionWebApp, "Mention WebApp", "Allows customers to sign up or log in effortlessly, enabling seamless management of profiles, preferences and subscriptions. Facilitates requests for press materials by providing a platform to review and approve them, request and provide suggestions. Furthermore, it offers perfect interaction with operators, allowing the exchange of messages during the production of the requested material.", $tags="", $sprite="react")
+
+    System_Boundary(MentionBackOffice, "Backoffice System"){
+      Container(BackofficeAdmin, "Backoffice Admin", "Node.js/Strapi", "Provides a web interface to manage the platform's data, such as customers, orders, subscriptions, etc. It also provides a Restful API to be consumed for other systems and services.", $tags="", $sprite="nodejs")
+      Container(LicenseIssuer, "License Issuer", "TypeScript/Nest.js", "Provides a RESTful API to manage the licenses", $tags="", $sprite="nestjs")
+      Container(MailDispatcher, "Mail Dispatcher", "TypeScript/Nest.js", "Provides a RESTful API to manage the mail dispatching", $tags="", $sprite="nestjs")
+      Container(RichEditor, "Rich Editor", "TypeScript/Nest.js", "Provides a RESTful API to manage the rich editor", $tags="", $sprite="nestjs")
+
+      Rel_U(LicenseIssuer, BackofficeAdmin, "Make requests for reading and writing licenses and orders")
+      Rel_U(MailDispatcher, BackofficeAdmin, "Make requests for reading destinations, templates, data; and writing messages dispatched by the platform")
+      Rel_U(RichEditor, BackofficeAdmin, "Make requests for rich editor reading and writing documents and templates")
+    }
+}
+
+Person(SubcribedUser, "Subcribed Users (Customers)", "Platform customer who purchased a product and/or service subscription plan. You can view and interact with the context of your subscription, such as profile, orders, licenses, archive and mailbox.", $tags="", $sprite="users")
+
+System_Ext(Cloud, "Cloud", "Cloud services", $tags="", $sprite="cloud")
+System_Ext(IAModel, "AI Model", "AI Text Generation Model", $tags="", $sprite="brain")
+System_Ext(ERP, "ERP", "Enterprise Resource Planning", $tags="", $sprite="file_invoice")
+System_Ext(CRM, "CRM", "Customer Relationship Management", $tags="", $sprite="file_invoice_dollar")
+
+' Relationships between actor and systems
+Rel(SubcribedUser, MentionWebApp, "View your orders, subscription data, etc; and make orders")
+
+Lay_D(MentionZone, SubcribedUser)
+
+Rel(Admin, BackofficeAdmin, "Make administrative tasks as manage the customers, manage the subscription data, use cli console to perform tasks, etc")
+Rel(Operators, BackofficeAdmin, "Make operational tasks as process orders, interact with the customers, etc")
+
+' Relationships between systems and external systems
+Rel(MentionWebApp, MentionBackOffice, "Make requests for backoffice services")
+Rel(LicenseIssuer, ERP, "Make requests for billing services")
+Rel(LicenseIssuer, CRM, "Make requests for CRM services")
+Rel(MailDispatcher, Cloud, "Make requests for cloud services")
+Rel(MailDispatcher, SubcribedUser, "Send messages to the customers")
+Rel(RichEditor, IAModel, "Make requests for AI Text Generation Model")
+
+SHOW_LEGEND(true)
+@enduml
