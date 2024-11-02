@@ -12,6 +12,7 @@ class DomainEvent extends Event<unknown, unknown> {
     super({ id: 'id', type: 'type', payload: {}, metadata: {}, timestamp: 0 });
   }
 }
+
 class AggregateRootSpec extends AggregateRoot<AggregateProps, string> {
   constructor(props: AggregateProps) {
     super(props);
@@ -21,11 +22,12 @@ class AggregateRootSpec extends AggregateRoot<AggregateProps, string> {
     this.addDomainEvent(new DomainEvent());
   }
 }
+
 describe('AggregateRootSpec', () => {
   let aggregateRootSpec: AggregateRootSpec;
-  let messageBus: MessageBus;
+  let messageBus: jest.Mocked<MessageBus>;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     const myAggregateProps: AggregateProps = {
       id: 'test',
       version: 0,
@@ -35,8 +37,11 @@ describe('AggregateRootSpec', () => {
       myProp: 'test',
     };
     aggregateRootSpec = new AggregateRootSpec(myAggregateProps);
-    messageBus = jest.createMockFromModule<MessageBus>('./Bus');
-    messageBus.publishEvent = jest.fn();
+
+    messageBus = {
+      publishEvent: jest.fn(),
+      // Adicione outros métodos mockados do MessageBus, se necessário
+    } as unknown as jest.Mocked<MessageBus>;
   });
 
   it('should be defined', () => {
