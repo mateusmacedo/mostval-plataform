@@ -1,27 +1,37 @@
 import { BasicMessageBus, Middleware } from './Bus';
-import { Handler, QueryHandler } from './Handlers';
+import { CommandHandler, EventHandler, QueryHandler } from './Handlers';
 import { Command, Event, Query } from './Message';
 
 describe('BasicMessageBus', () => {
-  let commandHandler: Handler<any>;
-  let queryHandler: QueryHandler<any, any>;
-  let eventHandler: Handler<any>;
+  let commandHandler: CommandHandler;
+  let queryHandler: QueryHandler;
+  let eventHandler: EventHandler;
   let middleware: Middleware<any>;
   let messageBus: BasicMessageBus;
 
   beforeEach(() => {
-    commandHandler = jest.createMockFromModule<Handler<any>>('./Handlers');
-    commandHandler.handle = jest.fn();
+    commandHandler = {
+      canHandle: jest.fn(),
+      handle: jest.fn(),
+      asyncHandle: jest.fn(),
+    };
 
-    queryHandler = jest.createMockFromModule<QueryHandler<any, any>>('./Handlers');
-    queryHandler.handle = jest.fn();
+    queryHandler = {
+      canHandle: jest.fn(),
+      handle: jest.fn(),
+      asyncHandle: jest.fn(),
+    };
 
-    eventHandler = jest.createMockFromModule<Handler<any>>('./Handlers');
-    eventHandler.handle = jest.fn();
+    eventHandler = {
+      canHandle: jest.fn(),
+      handle: jest.fn(),
+      asyncHandle: jest.fn(),
+    };
 
-    middleware = jest.fn().mockImplementation((message, next) => {
+    middleware = jest.fn().mockImplementation((_, next) => {
       next();
     });
+
     messageBus = new BasicMessageBus();
   });
 
