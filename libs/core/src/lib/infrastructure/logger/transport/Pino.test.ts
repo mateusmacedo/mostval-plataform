@@ -1,6 +1,6 @@
 import pino from 'pino';
 import { LogLevel } from '../../../application/Logger';
-import { PinoTransport } from './pino';
+import { PinoTransport } from './Pino';
 
 jest.mock('pino', () => {
   const mockPinoLogger = {

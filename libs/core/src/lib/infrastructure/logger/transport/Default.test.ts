@@ -1,5 +1,5 @@
 import { LogFormatter, LogLevel } from '../../../application/Logger';
-import { DefaultTransport, Writable } from './default';
+import { DefaultTransport, Writable } from './Default';
 
 describe('DefaultTransport', () => {
   let mockFormatter: jest.Mocked<LogFormatter>;
