@@ -8,28 +8,19 @@ export type Middleware<T extends Message<any, any>> = (
 
 export interface MessageBus {
   use(middleware: Middleware<Message<any, any>>): void;
-  registerCommandHandler<T extends Command<any, any>>(
-    commandType: string,
-    handler: CommandHandler<T>,
-  ): void;
-  sendCommand<T extends Command<any, any>>(command: T): Promise<void>;
-  registerQueryHandler<T extends Query<any, any>, R>(
-    queryType: string,
-    handler: QueryHandler<T, R>,
-  ): void;
-  sendQuery<T extends Query<any, any>, R>(query: T): Promise<R>;
-  registerEventHandler<T extends Event<any, any>>(
-    eventType: string,
-    handler: EventHandler<T>,
-  ): void;
-  publishEvent<T extends Event<any, any>>(event: T): Promise<void>;
+  registerCommandHandler(commandType: string, handler: CommandHandler): void;
+  sendCommand(command: Command<any, any>): Promise<void>;
+  registerQueryHandler(queryType: string, handler: QueryHandler): void;
+  sendQuery(query: Query<any, any>): Promise<any>;
+  registerEventHandler(eventType: string, handler: EventHandler): void;
+  publishEvent(event: Event<any, any>): Promise<void>;
 }
 
 export class BasicMessageBus implements MessageBus {
   constructor(
-    private commandHandlers: Map<string, CommandHandler<Command<any, any>>> = new Map(),
-    private queryHandlers: Map<string, QueryHandler<Query<any, any>, any>> = new Map(),
-    private eventHandlers: Map<string, EventHandler<Event<any, any>>[]> = new Map(),
+    private commandHandlers: Map<string, CommandHandler> = new Map(),
+    private queryHandlers: Map<string, QueryHandler> = new Map(),
+    private eventHandlers: Map<string, EventHandler[]> = new Map(),
     private middlewares: Middleware<Message<any, any>>[] = [],
   ) {}
 
@@ -37,34 +28,30 @@ export class BasicMessageBus implements MessageBus {
     this.middlewares.push(middleware);
   }
 
-  registerCommandHandler<T extends Command<any, any>>(
-    commandType: string,
-    handler: CommandHandler<T>,
-  ): void {
+  registerCommandHandler(commandType: string, handler: CommandHandler): void {
     this.commandHandlers.set(commandType, handler);
   }
 
-  async sendCommand<T extends Command<any, any>>(command: T): Promise<void> {
-    const handler = this.commandHandlers.get(command.type) as CommandHandler<T>;
+  async sendCommand(command: Command<any, any>): Promise<void> {
+    const handler = this.commandHandlers.get(command.type);
     if (!handler) {
       throw new Error(`No handler registered for command type ${command.type}`);
     }
-    await this.applyMiddlewares(command, async () => await handler.handle(command));
+    await this.applyMiddlewares(command, async () => {
+      await handler.handle(command);
+    });
   }
 
-  registerQueryHandler<T extends Query<any, any>, R>(
-    queryType: string,
-    handler: QueryHandler<T, R>,
-  ): void {
+  registerQueryHandler(queryType: string, handler: QueryHandler): void {
     this.queryHandlers.set(queryType, handler);
   }
 
-  async sendQuery<T extends Query<any, any>, R>(query: T): Promise<R> {
-    const handler = this.queryHandlers.get(query.type) as QueryHandler<T, R>;
+  async sendQuery(query: Query<any, any>): Promise<any> {
+    const handler = this.queryHandlers.get(query.type);
     if (!handler) {
       throw new Error(`No handler registered for query type ${query.type}`);
     }
-    let result: R | undefined;
+    let result: any;
     await this.applyMiddlewares(query, async () => {
       result = await handler.handle(query);
     });
@@ -74,19 +61,18 @@ export class BasicMessageBus implements MessageBus {
     return result;
   }
 
-  registerEventHandler<T extends Event<any, any>>(
-    eventType: string,
-    handler: EventHandler<T>,
-  ): void {
+  registerEventHandler(eventType: string, handler: EventHandler): void {
     const handlers = this.eventHandlers.get(eventType) || [];
     handlers.push(handler);
     this.eventHandlers.set(eventType, handlers);
   }
 
-  async publishEvent<T extends Event<any, any>>(event: T): Promise<void> {
+  async publishEvent(event: Event<any, any>): Promise<void> {
     const handlers = this.eventHandlers.get(event.type) || [];
     for (const handler of handlers) {
-      await this.applyMiddlewares(event, () => handler.handle(event));
+      await this.applyMiddlewares(event, async () => {
+        await handler.handle(event);
+      });
     }
   }
 
