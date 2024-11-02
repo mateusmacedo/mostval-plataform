@@ -1,44 +1,69 @@
+import { Result } from '../../application';
 import { Command, Event, Message, Query } from './Message';
 
-export interface Handler<T extends Message<any, any>> {
-  handle(message: T): Promise<any>;
+export interface IHandler<T extends Message<any>, R, E extends Error> {
+  canHandle(message: T): boolean;
+  handle(message: T): Result<R, E>;
+  asyncHandle(message: T): Promise<Result<R, E>>;
 }
 
-export type CommandHandler<T extends Command<any, any>> = Handler<T>;
+export interface CommandHandler extends IHandler<Command<any, any>, void, Error> {}
 
-export interface QueryHandler<T extends Query<any, any>, R> extends Handler<T> {
-  handle(query: T): Promise<R>;
+export interface QueryHandler extends IHandler<Query<any, any>, any, Error> {}
+
+export interface EventHandler extends IHandler<Event<any, any>, void, Error> {}
+
+export interface IPublisher<T extends Message<any>> {
+  publish(message: T): Result<void, Error>;
 }
 
-export type EventHandler<T extends Event<any, any>> = Handler<T>;
+export interface ISubscriber<T extends Message<any>> {
+  subscribe(handler: IHandler<T, any, any>): Result<void, Error>;
+}
+
+export interface IChannel<T extends Message<any>> extends IPublisher<T>, ISubscriber<T> {}
+
+export interface IBus<T extends Message<any>> extends IPublisher<T>, ISubscriber<T> {
+  registerChannel(channel: IChannel<T>): Result<void, Error>;
+}
 
 export interface RetryPolicy {
   retries: number;
   interval: number;
 }
 
-export class RetryableHandler<T extends Message> implements Handler<T> {
+export class RetryableHandler<T extends Message<any>, R, E extends Error>
+  implements IHandler<T, R, E>
+{
   constructor(
-    private handler: Handler<T>,
+    private handler: IHandler<T, R, E>,
     private policy: RetryPolicy,
   ) {}
 
-  async handle(message: T): Promise<void> {
+  canHandle(message: T): boolean {
+    return this.handler.canHandle(message);
+  }
+
+  handle(message: T): Result<R, E> {
+    return this.handler.handle(message);
+  }
+
+  async asyncHandle(message: T): Promise<Result<R, E>> {
     let attempts = 0;
-    const tryHandling = async (): Promise<void> => {
+    const tryHandling = async (): Promise<Result<R, E>> => {
       try {
-        await this.handler.handle(message);
+        return await this.handler.asyncHandle(message);
       } catch (error) {
         if (attempts < this.policy.retries) {
           attempts++;
           await new Promise((resolve) => setTimeout(resolve, this.policy.interval));
-          await tryHandling();
+          return await tryHandling();
         } else {
-          throw error;
+          return Result.failure<R, E>(error as E);
         }
       }
     };
-    await tryHandling();
+    return await tryHandling();
   }
 }
 
@@ -48,19 +73,29 @@ export interface CircuitBreakerPolicy {
   resetTimeout: number;
 }
 
-export class CircuitBreakerHandler<T extends Message> implements Handler<T> {
+export class CircuitBreakerHandler<T extends Message<any>, R, E extends Error>
+  implements IHandler<T, R, E>
+{
   private state: 'CLOSED' | 'OPEN' | 'HALF-OPEN' = 'CLOSED';
   private failureCount = 0;
   private nextAttempt = Date.now();
 
   constructor(
-    private handler: Handler<T>,
+    private handler: IHandler<T, R, E>,
     private policy: CircuitBreakerPolicy,
   ) {}
 
-  async handle(message: T): Promise<void> {
+  canHandle(message: T): boolean {
+    return this.handler.canHandle(message);
+  }
+
+  handle(message: T): Result<R, E> {
+    return this.handler.handle(message);
+  }
+
+  async asyncHandle(message: T): Promise<Result<R, E>> {
     if (this.state === 'OPEN' && Date.now() < this.nextAttempt) {
-      throw new Error('Circuit breaker is open');
+      return Result.failure<R, E>(new Error('Circuit breaker is open') as E);
     }
 
     if (this.state === 'OPEN') {
@@ -68,14 +103,15 @@ export class CircuitBreakerHandler<T extends Message> implements Handler<T> {
     }
 
     try {
-      await this.handler.handle(message);
+      const result = await this.handler.asyncHandle(message);
       this.reset();
+      return result;
     } catch (error) {
       this.recordFailure();
       if (this.state === 'HALF-OPEN' || this.failureCount >= this.policy.failureThreshold) {
         this.open();
       }
-      throw error;
+      return Result.failure<R, E>(error as E);
     }
   }
 
