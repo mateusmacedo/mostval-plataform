@@ -1,6 +1,6 @@
-@startuml Mention Plataform
+@startuml MostVal Plataform
 set separator none
-title Mention Plataform - System Container Diagram
+title MostVal Plataform - System Container Diagram
 
 top to bottom direction
 ' left to right direction
@@ -25,21 +25,21 @@ top to bottom direction
 
 UpdateSystemBoundaryStyle($bgColor="lightblue")
 
-Boundary(mention_zone, "Mention Zone") {
+Boundary(mostval_zone, "MostVal Zone") {
 
     Person(Operators, "Operators", "Operators are the agents who perform customer service, being responsible for fulfilling customer requests throughout their subscription cycle.", $tags="", $sprite="users")
 
     Person(Admin, "Admin", "Administrators have access to manage sensitive and restricted aspects. Responsible for maintaining the platform's structures and rules in accordance with the defined setup. In addition to performing cross-cutting tasks such as command-line operations to maintain or restore the consistent state of the application.", $tags="", $sprite="users")
 
-    System_Boundary(MentionWebApp, "Mention Web App") {
-      Container(SPA, "Mention Plataform SPA", "React/Next.js", "Allows customers to sign up or log in effortlessly, enabling seamless management of profiles, preferences and subscriptions. Facilitates requests for press materials by providing a platform to review and approve them, request and provide suggestions. Furthermore, it offers perfect interaction with operators, allowing the exchange of messages during the production of the requested material.", $tags="", $sprite="nextjs_line")
+    System_Boundary(MostValWebApp, "MostVal Web App") {
+      Container(SPA, "MostVal Plataform SPA", "React/Next.js", "Allows customers to sign up or log in effortlessly, enabling seamless management of profiles, preferences and subscriptions. Facilitates requests for press materials by providing a platform to review and approve them, request and provide suggestions. Furthermore, it offers perfect interaction with operators, allowing the exchange of messages during the production of the requested material.", $tags="", $sprite="nextjs_line")
 
-      Container(BFF, "Mention Plataform BFF", "Node/Nest.js", "The BFF is a gateway for the SPA, providing a unified interface for the SPA to interact with the backend services. It is responsible for aggregating data from multiple backend services, and providing a unified interface to the SPA.", $tags="", $sprite="nestjs")
+      Container(BFF, "MostVal Plataform BFF", "Node/Nest.js", "The BFF is a gateway for the SPA, providing a unified interface for the SPA to interact with the backend services. It is responsible for aggregating data from multiple backend services, and providing a unified interface to the SPA.", $tags="", $sprite="nestjs")
 
       Rel_L(SPA, BFF, "Uses")
     }
 
-    System(MentionBackOffice, "Backoffice System", "Offers an extensive and robust solution for effectively managing a wide array of platform domain data, including intricate access control lists (ACL), streamlined order processing systems, advanced file management capabilities, and seamlessly integrated customer service functionalities, among other essential features.", $tags="", $sprite="typescript")
+    System(MostValBackOffice, "Backoffice System", "Offers an extensive and robust solution for effectively managing a wide array of platform domain data, including intricate access control lists (ACL), streamlined order processing systems, advanced file management capabilities, and seamlessly integrated customer service functionalities, among other essential features.", $tags="", $sprite="typescript")
 }
 
 Person(SubcribedUser, "Subcribed Users (Customers)", "Platform customer who purchased a product and/or service subscription plan. You can view and interact with the context of your subscription, such as profile, orders, licenses, archive and mailbox.", $tags="", $sprite="users")
@@ -51,16 +51,16 @@ System_Ext(CRM, "CRM", "Customer Relationship Management", $tags="", $sprite="fi
 
 ' Relationships between actor and systems
 Rel_L(SubcribedUser, SPA, "View your orders, subscription data, etc and make orders")
-Rel_D(Admin, MentionBackOffice, "Make administrative tasks as manage the customers, manage the subscription data, use cli console to perform tasks, etc")
-Rel_D(Operators, MentionBackOffice, "Make operational tasks as process orders, interact with the customers, etc")
+Rel_D(Admin, MostValBackOffice, "Make administrative tasks as manage the customers, manage the subscription data, use cli console to perform tasks, etc")
+Rel_D(Operators, MostValBackOffice, "Make operational tasks as process orders, interact with the customers, etc")
 
 ' Relationships between systems and external systems
-Rel_D(BFF, MentionBackOffice, "Make requests for backoffice services")
-Rel_D(MentionBackOffice, ERP, "Make requests for billing services")
-Rel_D(MentionBackOffice, CRM, "Make requests for CRM services")
-Rel_L(MentionBackOffice, Cloud, "Make requests for cloud services")
-Rel_R(MentionBackOffice, SubcribedUser, "Receive messages from the plataform")
-Rel_L(MentionBackOffice, IAModel, "Make requests for AI Text Generation Model")
+Rel_D(BFF, MostValBackOffice, "Make requests for backoffice services")
+Rel_D(MostValBackOffice, ERP, "Make requests for billing services")
+Rel_D(MostValBackOffice, CRM, "Make requests for CRM services")
+Rel_L(MostValBackOffice, Cloud, "Make requests for cloud services")
+Rel_R(MostValBackOffice, SubcribedUser, "Receive messages from the plataform")
+Rel_L(MostValBackOffice, IAModel, "Make requests for AI Text Generation Model")
 
 Lay_D(Cloud, IAModel)
 

@@ -52,7 +52,7 @@ If you happen to use Nx plugins, you can leverage code generators that might com
 Run `nx list` to get a list of available plugins and whether they have generators. Then run `nx list <plugin-name>` to see what generators are available.
 
 Learn more about [Nx generators on the docs](https://nx.dev/features/generate-code).
-# Mention Platform
+# MostVal Platform
 
 ## Package management
 

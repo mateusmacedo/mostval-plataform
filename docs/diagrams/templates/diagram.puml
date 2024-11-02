@@ -1,6 +1,6 @@
-@startuml Mention Plataform
+@startuml MostVal Plataform
 set separator none
-title Mention Plataform - API Application - Components
+title MostVal Plataform - API Application - Components
 
 ' top to bottom direction
 ' left to right direction
@@ -23,11 +23,11 @@ title Mention Plataform - API Application - Components
 
 UpdateElementStyle("boundary", $borderColor="Black")
 
-Boundary(mention_zone, "Mention Zone") {
+Boundary(mostval_zone, "MostVal Zone") {
 
   Person(Admin, "Admin", "Administrators have access to manage sensitive and restricted aspects. Responsible for maintaining the platform's structures and rules in accordance with the defined setup. In addition to performing cross-cutting tasks such as command-line operations to maintain or restore the consistent state of the application.", $tags="", $sprite="users")
 
-  System(MentionWebApp, "Mention WebApp", "Allows customers to sign up or log in effortlessly, enabling seamless management of profiles, preferences and subscriptions. Facilitates requests for press materials by providing a platform to review and approve them, request and provide suggestions. Furthermore, it offers perfect interaction with operators, allowing the exchange of messages during the production of the requested material.", $tags="", $sprite="react")
+  System(MostValWebApp, "MostVal WebApp", "Allows customers to sign up or log in effortlessly, enabling seamless management of profiles, preferences and subscriptions. Facilitates requests for press materials by providing a platform to review and approve them, request and provide suggestions. Furthermore, it offers perfect interaction with operators, allowing the exchange of messages during the production of the requested material.", $tags="", $sprite="react")
 
   System_Boundary("System_boundary", "Web 2.0 System", $tags="") {
 

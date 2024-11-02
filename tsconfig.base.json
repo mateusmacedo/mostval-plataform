@@ -18,16 +18,16 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@mention/core": [
+      "@mostval/core": [
         "libs/core/src/index.ts"
       ],
-      "@mention/nest-core": [
+      "@mostval/nest-core": [
         "libs/nest-core/src/index.ts"
       ],
-      "@mention/next-core": [
+      "@mostval/next-core": [
         "libs/next-core/src/index.ts"
       ],
-      "@mention/next-core/server": [
+      "@mostval/next-core/server": [
         "libs/next-core/src/server.ts"
       ]
     },
