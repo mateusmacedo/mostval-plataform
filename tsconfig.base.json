@@ -10,26 +10,15 @@
     "importHelpers": true,
     "target": "es2022",
     "module": "esnext",
-    "lib": [
-      "es2022",
-      "dom"
-    ],
+    "lib": ["es2022", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@mostval/core": [
-        "libs/core/src/index.ts"
-      ],
-      "@mostval/nest-core": [
-        "libs/nest-core/src/index.ts"
-      ],
-      "@mostval/next-core": [
-        "libs/next-core/src/index.ts"
-      ],
-      "@mostval/next-core/server": [
-        "libs/next-core/src/server.ts"
-      ]
+      "@mostval/core": ["libs/core/src/index.ts"],
+      "@mostval/nest-core": ["libs/nest-core/src/index.ts"],
+      "@mostval/next-core": ["libs/next-core/src/index.ts"],
+      "@mostval/next-core/server": ["libs/next-core/src/server.ts"]
     },
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
@@ -47,13 +36,7 @@
     "alwaysStrict": true,
     "esModuleInterop": true,
     "noEmitOnError": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./types"
-    ]
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }
