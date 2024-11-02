@@ -1,4 +1,4 @@
-import { HttpResponseProps } from '@mention/core';
+import { HttpResponseProps } from '@mostval/core';
 import {
   CallHandler,
   ExecutionContext,
