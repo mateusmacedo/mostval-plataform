@@ -1,4 +1,5 @@
 import winston from 'winston';
+
 import { LogLevel, LogTransport } from '../../../application/Logger';
 
 export interface WinstonTransportOptions {

@@ -1,4 +1,5 @@
 import pino from 'pino';
+
 import { LogLevel, LogTransport } from '../../../application/Logger';
 
 export interface PinoTransportOptions {

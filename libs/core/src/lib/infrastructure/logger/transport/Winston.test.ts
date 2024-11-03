@@ -1,4 +1,5 @@
 import winston from 'winston';
+
 import { LogLevel } from '../../../application/Logger';
 import { WinstonTransport } from './Winston';
 

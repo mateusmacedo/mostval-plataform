@@ -1,6 +1,8 @@
+import 'reflect-metadata';
+
 import { plainToClass, Type } from 'class-transformer';
 import { IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
-import 'reflect-metadata';
+
 import { transformAndValidate, transformToClass, validateInstance } from './Mapper';
 
 class NestedDTO {
