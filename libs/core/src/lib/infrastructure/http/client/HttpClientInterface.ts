@@ -1,3 +1,5 @@
+import { Result } from '../../../application';
+
 export type HttpClientResponseProps<TResponse> = {
   status: number | string;
   data?: TResponse;
@@ -11,10 +13,6 @@ export type HttpClientProps = {
   requestInterceptor?: (config: any) => Promise<any>;
   responseInterceptor?: (response: any) => Promise<any>;
 };
-
-export type Result<TResponse, TError = Error> =
-  | { success: true; data: HttpClientResponseProps<TResponse> }
-  | { success: false; error: TError };
 
 export interface HttpClientInterface {
   get<TResponse>(uri: string, headers?: Record<string, string>): Promise<Result<TResponse>>;

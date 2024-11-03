@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-import { HttpClientInterface, HttpClientProps, Result } from './HttpClientInterface';
+import { Result } from '../../../application';
+import { HttpClientInterface, HttpClientProps } from './HttpClientInterface';
 
 export class AxiosHttpClient implements HttpClientInterface {
   private clientConfig: AxiosRequestConfig;
@@ -37,23 +38,9 @@ export class AxiosHttpClient implements HttpClientInterface {
         headers: { ...this.clientConfig.headers, ...headers },
       });
 
-      return {
-        success: true,
-        data: {
-          status: response.status,
-          data: response.data,
-        },
-      };
+      return Result.success(response.data);
     } catch (error: any) {
-      return {
-        success: false,
-        error: new Error(
-          JSON.stringify({
-            status: error?.response?.status ?? 500,
-            data: error?.response?.data ?? 'Erro Interno',
-          }),
-        ),
-      };
+      return Result.failure(error);
     }
   }
 

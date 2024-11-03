@@ -14,18 +14,15 @@ describe('AxiosHttpClient', () => {
   });
 
   it('should call POST method correctly', async () => {
-    const expects = {
-      status: 201,
-      data: 'hue',
-    };
+    const expects = 'hue';
     mockedAxios.request.mockResolvedValue({
-      status: expects.status,
-      data: expects.data,
+      status: 201,
+      data: expects,
     });
     const response = await sut.post('success', { aa: 'bb' });
     expect(response).toEqual({
       success: true,
-      data: expects,
+      value: expects,
     });
     expect(mockedAxios.request).toHaveBeenCalledWith({
       ...sut['clientConfig'],
@@ -37,18 +34,15 @@ describe('AxiosHttpClient', () => {
   });
 
   it('should call GET method correctly', async () => {
-    const expects = {
-      status: 200,
-      data: 'hue',
-    };
+    const expects = 'hue';
     mockedAxios.request.mockResolvedValue({
-      status: expects.status,
-      data: expects.data,
+      status: 200,
+      data: expects,
     });
     const response = await sut.get('success/123');
     expect(response).toEqual({
       success: true,
-      data: expects,
+      value: expects,
     });
     expect(mockedAxios.request).toHaveBeenCalledWith({
       ...sut['clientConfig'],
@@ -59,18 +53,15 @@ describe('AxiosHttpClient', () => {
   });
 
   it('should call PUT method correctly', async () => {
-    const expects = {
-      status: 200,
-      data: 'hue',
-    };
+    const expects = 'hue';
     mockedAxios.request.mockResolvedValue({
-      status: expects.status,
-      data: expects.data,
+      status: 200,
+      data: expects,
     });
     const response = await sut.put('success/123', { aa: 'bb' });
     expect(response).toEqual({
       success: true,
-      data: expects,
+      value: expects,
     });
     expect(mockedAxios.request).toHaveBeenCalledWith({
       ...sut['clientConfig'],
@@ -82,18 +73,15 @@ describe('AxiosHttpClient', () => {
   });
 
   it('should call DELETE method correctly', async () => {
-    const expects = {
-      status: 200,
-      data: 'hue',
-    };
+    const expects = 'hue';
     mockedAxios.request.mockResolvedValue({
-      status: expects.status,
-      data: expects.data,
+      status: 200,
+      data: expects,
     });
     const response = await sut.delete('success/123');
     expect(response).toEqual({
       success: true,
-      data: expects,
+      value: expects,
     });
     expect(mockedAxios.request).toHaveBeenCalledWith({
       ...sut['clientConfig'],
@@ -104,18 +92,15 @@ describe('AxiosHttpClient', () => {
   });
 
   it('should call PATCH method correctly', async () => {
-    const expects = {
-      status: 200,
-      data: 'hue',
-    };
+    const expects = 'hue';
     mockedAxios.request.mockResolvedValue({
-      status: expects.status,
-      data: expects.data,
+      status: 200,
+      data: expects,
     });
     const response = await sut.patch('success/123', { aa: 'bb' });
     expect(response).toEqual({
       success: true,
-      data: expects,
+      value: expects,
     });
     expect(mockedAxios.request).toHaveBeenCalledWith({
       ...sut['clientConfig'],
@@ -137,12 +122,7 @@ describe('AxiosHttpClient', () => {
     const response = await sut.get('failure/123');
     expect(response).toEqual({
       success: false,
-      error: new Error(
-        JSON.stringify({
-          status: errorResponse.response.status,
-          data: errorResponse.response.data,
-        }),
-      ),
+      error: errorResponse,
     });
     expect(mockedAxios.request).toHaveBeenCalledWith({
       ...sut['clientConfig'],
@@ -153,19 +133,16 @@ describe('AxiosHttpClient', () => {
   });
 
   it('should use custom headers when provided', async () => {
-    const expects = {
-      status: 200,
-      data: 'hue',
-    };
+    const expects = 'hue';
     const customHeaders = { Authorization: 'Bearer token' };
     mockedAxios.request.mockResolvedValue({
-      status: expects.status,
-      data: expects.data,
+      status: 200,
+      data: expects,
     });
     const response = await sut.get('custom-headers', customHeaders);
     expect(response).toEqual({
       success: true,
-      data: expects,
+      value: expects,
     });
     expect(mockedAxios.request).toHaveBeenCalledWith({
       ...sut['clientConfig'],
@@ -179,7 +156,7 @@ describe('AxiosHttpClient', () => {
     const requestInterceptor = jest.fn();
     const responseInterceptor = jest.fn();
 
-    const client = new AxiosHttpClient({
+    new AxiosHttpClient({
       requestInterceptor,
       responseInterceptor,
     });
