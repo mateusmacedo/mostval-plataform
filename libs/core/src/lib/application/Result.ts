@@ -1,4 +1,4 @@
-export class Result<T, E = string> {
+export class Result<T, E = Error> {
   private constructor(
     private readonly success: boolean,
     private readonly error?: E,
@@ -29,8 +29,8 @@ export class Result<T, E = string> {
     return this.error as E;
   }
 
-  public static success<U>(value?: U): Result<U> {
-    return new Result<U>(true, undefined, value);
+  public static success<U, E = Error>(value?: U): Result<U, E> {
+    return new Result<U, E>(true, undefined, value);
   }
 
   public static failure<U = never, E = unknown>(error: E): Result<U, E> {

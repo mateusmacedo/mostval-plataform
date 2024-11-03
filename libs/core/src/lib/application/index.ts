@@ -1,2 +1,2 @@
+export * from './Logger';
 export * from './Result';
-export * from './ServiceInterface';
