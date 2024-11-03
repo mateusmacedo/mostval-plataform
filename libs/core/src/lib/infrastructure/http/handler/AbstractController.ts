@@ -1,7 +1,7 @@
 import {
+  AbstractError,
   ConflictError,
   DependencyError,
-  InternalError,
   InvalidDataError,
   NotFoundError,
   ValidationError,
@@ -9,36 +9,33 @@ import {
 import { HttpResponse, HttpResponseProps } from './HttpResponse';
 
 export abstract class AbstractController {
-  protected processError(errorResult): HttpResponseProps {
+  protected processError<TError>(errorResult: AbstractError<TError>): HttpResponseProps {
     const notFoundErrors = [NotFoundError];
     const badRequestErrors = [ValidationError, InvalidDataError];
     const conflictErrors = [ConflictError];
     const serviceUnavailableErrors = [DependencyError];
     const unprocessableEntityErrors = [DependencyError];
-    const internalError = [InternalError];
 
-    if (conflictErrors.includes(errorResult.constructor)) {
+    if (conflictErrors.some((errorClass) => errorResult instanceof errorClass)) {
       return HttpResponse.conflict(errorResult.getError());
     }
 
-    if (serviceUnavailableErrors.includes(errorResult.constructor)) {
+    if (serviceUnavailableErrors.some((errorClass) => errorResult instanceof errorClass)) {
       return HttpResponse.serviceUnavailable(errorResult.getError());
     }
 
-    if (badRequestErrors.includes(errorResult.constructor)) {
+    if (badRequestErrors.some((errorClass) => errorResult instanceof errorClass)) {
       return HttpResponse.badRequest(errorResult.getError());
     }
 
-    if (unprocessableEntityErrors.includes(errorResult.constructor)) {
+    if (unprocessableEntityErrors.some((errorClass) => errorResult instanceof errorClass)) {
       return HttpResponse.unprocessableEntityError(errorResult.getError());
     }
 
-    if (notFoundErrors.includes(errorResult.constructor)) {
+    if (notFoundErrors.some((errorClass) => errorResult instanceof errorClass)) {
       return HttpResponse.notFound(errorResult.getError());
     }
 
-    if (internalError.includes(errorResult.constructor)) {
-      return HttpResponse.internalServerError('error during processing the request');
-    }
+    return HttpResponse.internalServerError('error during processing the request');
   }
 }
