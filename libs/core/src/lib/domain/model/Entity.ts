@@ -6,39 +6,45 @@ export type BaseEntityProps<ID> = {
   deletedAt: Date | null;
 };
 
-export abstract class BaseEntity<T extends BaseEntityProps<ID>, ID> {
-  protected _props: T;
+export abstract class BaseEntity<TProps extends BaseEntityProps<ID>, ID> {
+  protected readonly _props: TProps;
 
-  constructor(props: T) {
-    this._props = props;
+  protected constructor(props: TProps) {
+    this._props = {
+      ...props,
+      createdAt: props.createdAt ?? new Date(),
+      updatedAt: props.updatedAt ?? new Date(),
+      deletedAt: props.deletedAt ?? null,
+      version: props.version ?? 1,
+    };
   }
 
   public get id(): ID {
-    return this.props.id;
+    return this._props.id;
   }
 
   public get version(): number {
-    return this.props.version;
+    return this._props.version;
   }
 
   public incrementVersion(): void {
-    this.props.version++;
-    this.props.updatedAt = new Date();
+    this._props.version++;
+    this._props.updatedAt = new Date();
   }
 
   public get createdAt(): Date {
-    return this.props.createdAt;
+    return this._props.createdAt;
   }
 
   public get updatedAt(): Date {
-    return this.props.updatedAt;
+    return this._props.updatedAt;
   }
 
   public get deletedAt(): Date | null {
-    return this.props.deletedAt;
+    return this._props.deletedAt;
   }
 
-  public get props(): T {
+  public get props(): TProps {
     return this._props;
   }
 }
