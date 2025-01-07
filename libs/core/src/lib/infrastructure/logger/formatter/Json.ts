@@ -1,40 +1,46 @@
-import { LogFormatter, LogLevel } from '../../../application/Logger';
+import { LogFormatter, LogLevel } from '../../../application/Logger'
+
+export interface JsonLogEntry {
+  level: LogLevel
+  message: string
+  meta: Record<string, unknown>
+  timestamp: string
+  pid: number
+}
 
 export class JsonFormatter implements LogFormatter {
-  format(level: LogLevel, message: string, meta?: unknown): string {
-    const timestamp = new Date().toISOString();
-    const pid = process.pid;
-
-    const logEntry = {
-      level,
-      message: message !== undefined ? message : 'undefined',
-      meta: typeof meta === 'object' && meta !== null ? this.replaceCircular(meta) : {},
-      timestamp,
-      pid,
-    };
-
-    return JSON.stringify(logEntry);
-  }
-
-  private replaceCircular(obj: unknown): unknown {
-    const seen = new WeakSet<object>();
-
-    const traverse = (value: unknown): unknown => {
+  private static readonly circularReplacer = () => {
+    const seen = new WeakSet()
+    return (key: string, value: unknown) => {
       if (typeof value === 'object' && value !== null) {
         if (seen.has(value)) {
-          return '[Circular]';
+          return '[Circular]'
         }
-        seen.add(value);
-
-        const newValue = Array.isArray(value) ? [] : {};
-        for (const [key, val] of Object.entries(value)) {
-          (newValue as Record<string, unknown>)[key] = traverse(val);
-        }
-        return newValue;
+        seen.add(value)
       }
-      return value;
-    };
+      return value
+    }
+  }
 
-    return traverse(obj);
+  constructor(private readonly options: { pretty?: boolean } = {}) {}
+
+  format(level: LogLevel, message: string, meta?: unknown): string {
+    const logEntry: JsonLogEntry = {
+      level,
+      message: message || 'undefined',
+      meta: this.normalizeMeta(meta),
+      timestamp: new Date().toISOString(),
+      pid: process.pid,
+    }
+
+    return this.options.pretty
+      ? JSON.stringify(logEntry, JsonFormatter.circularReplacer(), 2)
+      : JSON.stringify(logEntry, JsonFormatter.circularReplacer())
+  }
+
+  private normalizeMeta(meta: unknown): Record<string, unknown> {
+    if (!meta) return {}
+    if (typeof meta !== 'object') return { value: meta }
+    return meta as Record<string, unknown>
   }
 }
