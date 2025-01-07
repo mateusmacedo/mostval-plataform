@@ -3,14 +3,14 @@ export type ValidationResult = {
   errors: string[];
 };
 
-export interface ValidationRule {
-  validate(input: any, path?: string): ValidationResult;
+export interface ValidationRule<T = any> {
+  validate(input: T, path?: string): ValidationResult;
 }
 
-export class ObjectValidationRule implements ValidationRule {
-  constructor(private rules: { [key: string]: ValidationRule }) {}
+export class ObjectValidationRule<T extends object> implements ValidationRule<T> {
+  constructor(private rules: { [K in keyof T]?: ValidationRule<T[K]> }) {}
 
-  validate(input: any, path = ''): ValidationResult {
+  validate(input: T, path = ''): ValidationResult {
     if (typeof input !== 'object' || Array.isArray(input) || input === null) {
       return { success: false, errors: [`${path}: Expected an object`] };
     }
@@ -27,8 +27,8 @@ export class ObjectValidationRule implements ValidationRule {
   }
 }
 
-export class ArrayValidationRule implements ValidationRule {
-  constructor(private rule: ValidationRule) {}
+export class ArrayValidationRule<T> implements ValidationRule<T[]> {
+  constructor(private rule: ValidationRule<T>) {}
 
   validate(input: any, path = ''): ValidationResult {
     if (!Array.isArray(input)) {
