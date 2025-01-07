@@ -113,3 +113,35 @@ export class RegexValidationRule implements ValidationRule {
     return { success: true, errors: [] };
   }
 }
+
+export class DateValidationRule implements ValidationRule {
+  validate(input: any, path = ''): ValidationResult {
+    if (!(input instanceof Date) || isNaN(input.getTime())) {
+      return { success: false, errors: [`${path}: Data inválida`] };
+    }
+    return { success: true, errors: [] };
+  }
+}
+
+export class BooleanValidationRule implements ValidationRule {
+  validate(input: any, path = ''): ValidationResult {
+    if (typeof input !== 'boolean') {
+      return { success: false, errors: [`${path}: Valor booleano esperado`] };
+    }
+    return { success: true, errors: [] };
+  }
+}
+
+export class EnumValidationRule<T> implements ValidationRule {
+  constructor(private readonly validValues: T[], private readonly fieldName: string) {}
+
+  validate(input: any): ValidationResult {
+    if (!this.validValues.includes(input[this.fieldName])) {
+      return {
+        success: false,
+        errors: [`${this.fieldName} deve ser um dos seguintes valores: ${this.validValues.join(', ')}`],
+      };
+    }
+    return { success: true, errors: [] };
+  }
+}
