@@ -129,3 +129,26 @@ export class CircuitBreakerHandler<T extends Message<any>, R, E extends Error>
     this.failureCount++
   }
 }
+
+export function LogHandler() {
+  return function <T extends Message<any>, R, E extends Error>(
+    target: IHandler<T, R, E>,
+    propertyKey: string,
+    descriptor: PropertyDescriptor,
+  ) {
+    const originalMethod = descriptor.value
+
+    descriptor.value = async function (...args: any[]) {
+      console.log(`Handling ${args[0].type} at ${new Date().toISOString()}`)
+      try {
+        const result = await originalMethod.apply(this, args)
+        console.log(`Handled ${args[0].type} successfully`)
+        return result
+      } catch (error) {
+        console.error(`Error handling ${args[0].type}:`, error)
+        throw error
+      }
+    }
+    return descriptor
+  }
+}

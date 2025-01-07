@@ -1,48 +1,62 @@
 export type MessageMetadata<T = any> = {
-  [Property in keyof T]?: T[Property];
-};
+  [Property in keyof T]?: T[Property]
+}
 
 export type MessagePayload<P = any> = {
-  [Property in keyof P]?: P[Property];
-};
+  [Property in keyof P]?: P[Property]
+}
 
 export type MessageProps<P = any, M = any> = {
-  id: string;
-  type: string;
-  payload: MessagePayload<P>;
-  metadata: MessageMetadata<M>;
-  timestamp: number;
-};
+  id: string
+  type: string
+  payload: MessagePayload<P>
+  metadata: MessageMetadata<M>
+  timestamp: number
+}
 
 export interface Message<P = any, M = any> {
-  get id(): string;
-  get type(): string;
-  get payload(): MessagePayload<P>;
-  get metadata(): MessageMetadata<M>;
-  get timestamp(): number;
+  get id(): string
+  get type(): string
+  get payload(): MessagePayload<P>
+  get metadata(): MessageMetadata<M>
+  get timestamp(): number
 }
 
 export abstract class BaseMessage<P = any, M = any> implements Message<P, M> {
-  constructor(protected props: MessageProps<P, M>) {}
+  constructor(protected props: MessageProps<P, M>) {
+    this.validate()
+  }
+
+  protected validate(): void {
+    if (!this.props.id) {
+      throw new Error('Message must have an id')
+    }
+    if (!this.props.type) {
+      throw new Error('Message must have a type')
+    }
+    if (!this.props.timestamp) {
+      throw new Error('Message must have a timestamp')
+    }
+  }
 
   get id(): string {
-    return this.props.id;
+    return this.props.id
   }
 
   get type(): string {
-    return this.props.type;
+    return this.props.type
   }
 
   get payload(): MessagePayload<P> {
-    return this.props.payload;
+    return this.props.payload
   }
 
   get metadata(): MessageMetadata<M> {
-    return this.props.metadata;
+    return this.props.metadata
   }
 
   get timestamp(): number {
-    return this.props.timestamp;
+    return this.props.timestamp
   }
 }
 
