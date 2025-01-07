@@ -1,22 +1,44 @@
-import { ValueObject } from './ValueObject';
+import { ValueObject, Primitives } from './ValueObject'
 
-export class Identifier<T> implements ValueObject<T> {
-  constructor(private value: T) {
-    this.value = value;
-  }
+type IdentifierProps<T> = {
+  value: T extends Primitives | Primitives[] ? T : never
+}
 
-  equals(id: Identifier<T>): boolean {
-    if (id.constructor.name !== this.constructor.name) {
-      return false;
+export class Identifier<T extends Primitives | Primitives[]>
+  implements ValueObject<IdentifierProps<T>>
+{
+  private readonly props: IdentifierProps<T>
+
+  constructor(value: T) {
+    if (value === null || value === undefined) {
+      throw new Error('O identificador não pode ser nulo ou indefinido')
     }
-    return id.toValue() === this.value;
+    this.props = { value } as IdentifierProps<T>
   }
 
-  toString() {
-    return String(this.value);
+  public equals(vo?: ValueObject<IdentifierProps<T>>): boolean {
+    if (!vo) {
+      return false
+    }
+    if (vo.constructor !== this.constructor) {
+      return false
+    }
+    return vo.toValue().value === this.props.value
   }
 
-  toValue(): T {
-    return this.value;
+  public toString(): string {
+    return String(this.props.value)
+  }
+
+  public toValue(): IdentifierProps<T> {
+    return Object.freeze({ ...this.props })
+  }
+
+  public getValue(): T {
+    return this.props.value
+  }
+
+  public static isValid(value: unknown): boolean {
+    return value !== null && value !== undefined
   }
 }
