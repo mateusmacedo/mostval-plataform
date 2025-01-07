@@ -1,41 +1,27 @@
-import {
-  AbstractError,
-  ConflictError,
-  DependencyError,
-  InvalidDataError,
-  NotFoundError,
-  ValidationError,
-} from '../../../domain';
-import { HttpResponse, HttpResponseProps } from './HttpResponse';
+import { AbstractError } from '../../../domain'
+import { HttpResponse, HttpResponseProps, HttpStatus } from './HttpResponse'
+
+type ErrorMapping = {
+  errorType: new (...args: any[]) => AbstractError<any>
+  statusCode: HttpStatus
+}
 
 export abstract class AbstractController {
+  private static errorMappings: ErrorMapping[] = [
+    { errorType: NotFoundError, statusCode: HttpStatus.NOT_FOUND },
+    { errorType: ValidationError, statusCode: HttpStatus.BAD_REQUEST },
+    { errorType: InvalidDataError, statusCode: HttpStatus.BAD_REQUEST },
+    { errorType: ConflictError, statusCode: HttpStatus.CONFLICT },
+    { errorType: DependencyError, statusCode: HttpStatus.SERVICE_UNAVAILABLE },
+  ]
+
   protected processError<TError>(errorResult: AbstractError<TError>): HttpResponseProps {
-    const notFoundErrors = [NotFoundError];
-    const badRequestErrors = [ValidationError, InvalidDataError];
-    const conflictErrors = [ConflictError];
-    const serviceUnavailableErrors = [DependencyError];
-    const unprocessableEntityErrors = [DependencyError];
+    const mapping = AbstractController.errorMappings.find((m) => errorResult instanceof m.errorType)
 
-    if (conflictErrors.some((errorClass) => errorResult instanceof errorClass)) {
-      return HttpResponse.conflict(errorResult.getError());
+    if (mapping) {
+      return HttpResponse.jsonResponse(mapping.statusCode, errorResult.getError())
     }
 
-    if (serviceUnavailableErrors.some((errorClass) => errorResult instanceof errorClass)) {
-      return HttpResponse.serviceUnavailable(errorResult.getError());
-    }
-
-    if (badRequestErrors.some((errorClass) => errorResult instanceof errorClass)) {
-      return HttpResponse.badRequest(errorResult.getError());
-    }
-
-    if (unprocessableEntityErrors.some((errorClass) => errorResult instanceof errorClass)) {
-      return HttpResponse.unprocessableEntityError(errorResult.getError());
-    }
-
-    if (notFoundErrors.some((errorClass) => errorResult instanceof errorClass)) {
-      return HttpResponse.notFound(errorResult.getError());
-    }
-
-    return HttpResponse.internalServerError('error during processing the request');
+    return HttpResponse.internalServerError('Error during request processing')
   }
 }

@@ -1,7 +1,7 @@
-export type HttpResponseProps<TResponse = any> = {
-  status: HttpStatus;
-  data: TResponse;
-};
+export type HttpResponseProps<TResponse = unknown> = {
+  status: HttpStatus
+  data: TResponse
+}
 
 export enum HttpStatus {
   CONTINUE = 100,
@@ -56,54 +56,53 @@ export enum HttpStatus {
 
 export class HttpResponse {
   private static jsonResponse<TResponse>(
-    isSuccess: boolean,
-    status: number,
-    dataOrMesage?: any,
+    status: HttpStatus,
+    data?: TResponse,
   ): HttpResponseProps<TResponse> {
-    return { status: status, data: dataOrMesage };
+    return { status, data }
   }
 
   static ok<TResponse>(data: TResponse): HttpResponseProps<TResponse> {
-    return HttpResponse.jsonResponse(true, HttpStatus.OK, data);
+    return HttpResponse.jsonResponse(HttpStatus.OK, data)
   }
 
   static created<TResponse>(): HttpResponseProps<TResponse> {
-    return HttpResponse.jsonResponse(true, HttpStatus.CREATED);
+    return HttpResponse.jsonResponse(HttpStatus.CREATED)
   }
 
   static noContent<TResponse>(): HttpResponseProps<TResponse> {
-    return HttpResponse.jsonResponse(true, HttpStatus.NO_CONTENT);
+    return HttpResponse.jsonResponse(HttpStatus.NO_CONTENT)
   }
 
   static notFound<TResponse>(data: TResponse): HttpResponseProps<TResponse> {
-    return HttpResponse.jsonResponse(false, HttpStatus.NOT_FOUND, data);
+    return HttpResponse.jsonResponse(HttpStatus.NOT_FOUND, data)
   }
 
   static badRequest<TResponse>(data: TResponse): HttpResponseProps<TResponse> {
-    return HttpResponse.jsonResponse(false, HttpStatus.BAD_REQUEST, data);
+    return HttpResponse.jsonResponse(HttpStatus.BAD_REQUEST, data)
   }
 
   static serviceUnavailable<TResponse>(data: TResponse): HttpResponseProps<TResponse> {
-    return HttpResponse.jsonResponse(false, HttpStatus.SERVICE_UNAVAILABLE, data);
+    return HttpResponse.jsonResponse(HttpStatus.SERVICE_UNAVAILABLE, data)
   }
 
   static forbidden<TResponse>(data: TResponse): HttpResponseProps<TResponse> {
-    return HttpResponse.jsonResponse(false, HttpStatus.FORBIDDEN, data);
+    return HttpResponse.jsonResponse(HttpStatus.FORBIDDEN, data)
   }
 
   static unautorized<TResponse>(data: TResponse): HttpResponseProps<TResponse> {
-    return HttpResponse.jsonResponse(false, HttpStatus.UNAUTHORIZED, data);
+    return HttpResponse.jsonResponse(HttpStatus.UNAUTHORIZED, data)
   }
 
   static conflict<TResponse>(data: TResponse): HttpResponseProps<TResponse> {
-    return HttpResponse.jsonResponse(false, HttpStatus.CONFLICT, data);
+    return HttpResponse.jsonResponse(HttpStatus.CONFLICT, data)
   }
 
   static internalServerError<TResponse>(data: TResponse): HttpResponseProps<TResponse> {
-    return HttpResponse.jsonResponse(false, HttpStatus.INTERNAL_SERVER_ERROR, data);
+    return HttpResponse.jsonResponse(HttpStatus.INTERNAL_SERVER_ERROR, data)
   }
 
   static unprocessableEntityError<TResponse>(data: TResponse): HttpResponseProps<TResponse> {
-    return HttpResponse.jsonResponse(false, HttpStatus.UNPROCESSABLE_ENTITY, data);
+    return HttpResponse.jsonResponse(HttpStatus.UNPROCESSABLE_ENTITY, data)
   }
 }
