@@ -1,57 +1,51 @@
-import { AggregateRoot } from './AggregateRoot';
-import { MessageBus } from './Bus';
-import { BaseEntityProps } from './Entity';
-import { Event } from './Message';
+import { AggregateRoot } from './AggregateRoot'
+import { BaseEntityProps } from './Entity'
+import { MessageBus } from './Bus'
+import { Event } from './Message'
 
-type AggregateProps = {
-  myProp: string;
-} & BaseEntityProps<string>;
-
-class DomainEvent extends Event<unknown, unknown> {
+class TestEvent extends Event<any> {
   constructor() {
-    super({ id: 'id', type: 'type', payload: {}, metadata: {}, timestamp: 0 });
+    super({
+      id: '1',
+      type: 'TEST_EVENT',
+      payload: {},
+      metadata: {},
+      timestamp: Date.now(),
+    })
   }
 }
 
-class AggregateRootSpec extends AggregateRoot<AggregateProps, string> {
-  constructor(props: AggregateProps) {
-    super(props);
-  }
-
-  public domainFeature(): void {
-    this.addDomainEvent(new DomainEvent());
+class TestAggregate extends AggregateRoot<BaseEntityProps<string>, string> {
+  public addEvent(): void {
+    this.addDomainEvent(new TestEvent())
   }
 }
 
 describe('AggregateRootSpec', () => {
-  let aggregateRootSpec: AggregateRootSpec;
-  let messageBus: jest.Mocked<MessageBus>;
+  let aggregate: TestAggregate
+  let messageBus: MessageBus
 
   beforeEach(() => {
-    const myAggregateProps: AggregateProps = {
-      id: 'test',
-      version: 0,
+    aggregate = new TestAggregate({
+      id: '1',
+      version: 1,
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,
-      myProp: 'test',
-    };
-    aggregateRootSpec = new AggregateRootSpec(myAggregateProps);
-
+    })
     messageBus = {
-      publishEvent: jest.fn(),
-      // Adicione outros métodos mockados do MessageBus, se necessário
-    } as unknown as jest.Mocked<MessageBus>;
-  });
+      publishEvent: jest.fn().mockResolvedValue(undefined),
+    } as unknown as MessageBus
+  })
 
   it('should be defined', () => {
-    aggregateRootSpec.domainFeature();
-    expect(aggregateRootSpec).toBeDefined();
-  });
+    aggregate.addEvent()
+    expect(aggregate).toBeDefined()
+  })
 
   it('should publish domain events', async () => {
-    aggregateRootSpec.domainFeature();
-    await aggregateRootSpec.publishDomainEvents(messageBus);
-    expect(messageBus.publishEvent).toHaveBeenCalled();
-  });
-});
+    aggregate.addEvent()
+    await aggregate.publishDomainEvents(messageBus)
+    expect(messageBus.publishEvent).toHaveBeenCalled()
+  })
+})
