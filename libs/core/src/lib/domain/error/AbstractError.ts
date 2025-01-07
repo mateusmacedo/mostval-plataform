@@ -1,19 +1,21 @@
-export abstract class AbstractError<TError> {
+export type ErrorMessage = string | string[] | Record<string, unknown>
+
+export abstract class AbstractError<TError = ErrorMessage> {
   constructor(
     private errorOrMessage: TError,
     private code: number = 0,
-    private previousError: AbstractError<any> | null = null,
+    private previousError: AbstractError | null = null,
   ) {}
 
   getError(): TError {
-    return this.errorOrMessage;
+    return this.errorOrMessage
   }
 
   getCode(): number | undefined {
-    return this.code;
+    return this.code
   }
 
-  getPreviousError(): AbstractError<any> | null {
-    return this.previousError;
+  getPreviousError(): AbstractError | null {
+    return this.previousError
   }
 }
