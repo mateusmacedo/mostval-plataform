@@ -55,11 +55,11 @@ export enum HttpStatus {
 }
 
 export class HttpResponse {
-  private static jsonResponse<TResponse>(
+  static jsonResponse<TResponse>(
     status: HttpStatus,
     data?: TResponse,
   ): HttpResponseProps<TResponse> {
-    return { status, data }
+    return { status, data: data ?? ({} as TResponse) }
   }
 
   static ok<TResponse>(data: TResponse): HttpResponseProps<TResponse> {

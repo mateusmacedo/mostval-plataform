@@ -1,4 +1,4 @@
-import { AbstractError } from './AbstractError'
+import { AbstractError, ErrorMessage } from './AbstractError'
 import { ERRORS, ErrorsType } from './ErrorsType'
 
 export class ErrorFactory {
